@@ -13,9 +13,7 @@ class Api::V1::StudentsController < ApplicationController
 
   def create
     new_student = Student.new(student_params)
-    until new_student.valid?
-      Student.registration = rand(10**8...10**9)
-    end
+    new_student.registration = rand(10**8...10**9)
     new_student.save!
     render json: new_student, status: :created
   rescue StandardError => e
@@ -24,16 +22,24 @@ class Api::V1::StudentsController < ApplicationController
 
   def update
     student = Student.find(params[:id])
-    student.update(student_params)
+    student.update!(student_params)
     render json: student, status: :accepted
-    rescue StandardError
+  rescue StandardError => e
+    render json: {message: e.message}, status: :unprocessable_entity
   end
 
+  def delete
+    student = Student.find(params[:id])
+    student.destroy!
+    render json: student, status: :accepted
+  rescue StandardError => e
+    render json: {message: e.message}, status: :unprocessable_entity
+  end
 
   private
 
   def student_params
-    params.require(:students).permit(
+    params.require(:student).permit(
       :name,
       :email,
       :birth_date,

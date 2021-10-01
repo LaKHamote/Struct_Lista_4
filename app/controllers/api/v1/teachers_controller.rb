@@ -38,7 +38,7 @@ class Api::V1::TeachersController < ApplicationController
   def my_students
     students = Teacher.find(params[:id]).students
     if students.empty?
-      render json: {message: "This teacher doesn't have any students"}, status: :no_content
+      head(:no_content)
     else
       render json: students, status: :found
     end
