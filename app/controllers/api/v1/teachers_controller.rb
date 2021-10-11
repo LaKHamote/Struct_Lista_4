@@ -1,4 +1,5 @@
 class Api::V1::TeachersController < ApplicationController
+  acts_as_token_authentication_handler_for Admin, only: [:create, :delete, :update]
   def index
     teachers = Teacher.all
     render json: teachers, status: :ok
@@ -24,7 +25,7 @@ class Api::V1::TeachersController < ApplicationController
     teacher.update!(teacher_params)
     render json: teacher, status: :accepted
   rescue StandardError => e
-    render json: {message: e.message}, status: :unprocessable_entity
+    render json: {message: e.message}, status: :bad_request
   end
 
   def delete
@@ -52,7 +53,8 @@ class Api::V1::TeachersController < ApplicationController
     params.require(:teacher).permit(
       :name,
       :email,
-      :birth_date
+      :birth_date,
+      :profile_picture
     )
   end
 

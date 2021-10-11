@@ -1,4 +1,5 @@
 class Api::V1::StudentsController < ApplicationController
+  acts_as_token_authentication_handler_for Admin, only: [:create, :delete, :update]
   def index
     students = Student.all
     render json: students, status: :ok
@@ -43,7 +44,8 @@ class Api::V1::StudentsController < ApplicationController
       :name,
       :email,
       :birth_date,
-      :teacher_id
+      :teacher_id,
+      :profile_picture
     )
   end
 end

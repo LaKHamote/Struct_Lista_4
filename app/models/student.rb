@@ -1,5 +1,6 @@
 class Student < ApplicationRecord
   belongs_to :teacher, optional: true
+  has_one_attached :profile_picture
 
   validates_presence_of :name, :registration, :email, :birth_date
   validates :email, email: true

@@ -1,5 +1,6 @@
 class Language < ApplicationRecord
   belongs_to :teacher, optional: true
+  has_many_attached :references
 
   validates :name,  presence: true, uniqueness: true
   validates_uniqueness_of :teacher_id, {message: ->(object,data) do
